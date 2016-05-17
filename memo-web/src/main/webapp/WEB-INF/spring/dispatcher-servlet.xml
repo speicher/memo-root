@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+    
+     
+    <!-- 扫描本工程下的bean -->
+    <context:component-scan base-package="org.memo.web" />
+    
+    <mvc:resources mapping="/static/**" location="/static/" />
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/community/usr/home"/><!-- 需要进行拦截的请求路径 -->
+            <mvc:mapping path="/community/usr/profile_s"/>
+            <mvc:mapping path="/community/works/editor"/>
+            <mvc:mapping path="/community/works/content_s"/>
+            <bean id="sessionCheckInterceptor" class="org.memo.web.interceptor.SessionCheckInterceptor">
+			    <property name="sessionKey" value="loginok"/>
+			    <property name="logoutUrl" value="http://localhost:8080/dany/community/login"/>
+		    </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    
+    <mvc:annotation-driven />
+    
+    <!-- <mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean> -->
+			<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+			<!-- <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=UTF-8</value>
+						<value>application/x-www-form-urlencoded;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven> -->
+	
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+        <property name="prefix" value="/WEB-INF/views/" />  
+        <property name="suffix" value=".jsp" />
+        <property name="contentType" value="UTF-8" />
+    </bean>
+</beans>
